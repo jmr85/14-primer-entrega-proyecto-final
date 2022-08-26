@@ -1,0 +1,19 @@
+{
+  "name": "14-primer-entrega-proyecto-final",
+  "version": "1.0.0",
+  "description": "primer entrega proyecto final",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "short-uuid": "^4.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.13"
+  }
+}
