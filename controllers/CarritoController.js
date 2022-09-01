@@ -63,9 +63,16 @@ const createCarrito = async (req, res) => {
 }
 // TODO: Add
 // agregar producto al carrito, a un id especifico de carrito
-// {URL}/:id/productos
+// {URL}/:id/productos/:id_prod
 const addProductCarrito = async (req, res) => {
-
+    const {id, id_prod} = req.params;
+    const id_carrito = parseInt(id);
+    const id_producto = parseInt(id_prod);
+    console.log("PARAMS -> " + id_carrito, id_producto);
+    await contenedorCarrito.addProductCarrito(id_carrito, id_prod);
+    return res.status(200).json({
+        message: 'producto agregado al carrito'
+    });
 }
 
 // delete product by id

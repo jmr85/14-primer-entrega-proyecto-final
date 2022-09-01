@@ -1,6 +1,9 @@
 const fs = require('fs');
 
-class Contenedor {
+const Contenedor = require('./Contenedor');
+let contenedorProducto = new Contenedor('./data/productos.json');
+
+class ContenedorCarrito {
     constructor(fileName) {
         this.fileName = fileName;
     }
@@ -22,21 +25,54 @@ class Contenedor {
             console.log("error -> ", error)
         }
     }
-    async addProductCarrito(id) {
-        let obj = { id };
+    async addProductCarrito(idCarrito, idProducto) {
+        // to-do: ver eso de spread operator con array
+       
+       
+        //    const productos = [];
+        //    let obj = { timestamp, productos: productos };
+        //    try {
+        //        let dataArch = await fs.promises.readFile(this.fileName, 'utf8')
+        //        let dataArchParse = JSON.parse(dataArch)
+        //        if (dataArchParse.length) {
+        //            await fs.promises.writeFile(this.fileName, JSON.stringify([...dataArchParse, { ...obj, producto: dataArchParse[dataArchParse.length - 1]}], null, 2))
+        //        } else {
+        //            await fs.promises.writeFile(this.fileName, JSON.stringify([{ ...obj, id: 1 }], null, 2))
+        //        }
+        //        console.log(`El archivo tiene el id: ${dataArchParse[dataArchParse.length - 1].id + 1}`)
+        //    } catch (error) {
+        //        console.log("error -> ", error)
+        //    }
+
         try {
+            let producto = [{id: 8, nombre: 'probando'}]
+            // let producto = await contenedorProducto.getById(idProducto);
+
             let dataArch = await fs.promises.readFile(this.fileName, 'utf8')
             let dataArchParse = JSON.parse(dataArch)
-            if (dataArchParse.length) {
-                await fs.promises.writeFile(this.fileName, JSON.stringify([...dataArchParse, { ...obj, id: dataArchParse[dataArchParse.length - 1].id + 1 }], null, 2))
+            let carrito = dataArchParse.find(carr => carr.id === idCarrito)// solo para validar
+            if (carrito !== undefined || carrito !== null) {
+
+                const dataArchParseFiltrado = dataArchParse.map(elementCarrito => {
+                    if (elementCarrito.id === idCarrito) {
+                        console.log('addProductCarrito method -> PRODUCTO: ', producto);
+                        elementCarrito.productos = [...producto];
+                        return elementCarrito;
+                    } else {
+                        return elementCarrito;
+                    }
+                })
+                await fs.promises.writeFile(this.fileName, JSON.stringify(dataArchParseFiltrado, null, 2), 'utf-8')
+
+                console.log('Contenedor log: ', 'Se agrego producto al carrito')
             } else {
-                await fs.promises.writeFile(this.fileName, JSON.stringify([{ ...obj, id: 1 }], null, 2))
+                console.log('Contenedor log: ', 'no existe el carrito')
             }
-            console.log(`El archivo tiene el id: ${dataArchParse[dataArchParse.length - 1].id + 1}`)
         } catch (error) {
-            console.log("error -> ", error)
+            throw error;
         }
     }
+
     async getAll() {
         let contenido = []
         try {
@@ -92,4 +128,4 @@ class Contenedor {
 
 }
 
-module.exports = Contenedor;
+module.exports = ContenedorCarrito;
